@@ -9,8 +9,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from torch import nn
 import torch.nn.functional as F
 
-from FiD.src import model
-from FiD.src.modeling_t5 import T5ForConditionalGeneration
+from fid.src import model
+from fid.src.modeling_t5 import T5ForConditionalGeneration
 # from retrieval.model import BertEncoder_For_CrossEncoder
 
 def get_top10(

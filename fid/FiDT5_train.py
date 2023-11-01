@@ -204,7 +204,7 @@ def get_dataset(opt):
 
     # data = load_dataset("jjonhwa/SECOND_KQ_V2")
     data = load_dataset(opt.from_data)
-
+    
     new_data = pd.DataFrame(data['train'])
 
     new_data = pasasge_more_than(new_data, opt.n_context)
@@ -331,7 +331,7 @@ if __name__ == '__main__':
         model = src.model.convert_GQA(model,kv_heads=opt.kv_heads)
         model = src.model.convert_LSA(model,n_cross_layer=opt.n_cross_layer)
     
-    model = nn.DataParallel(model)
+    model = nn.DataParallel(model, device_ids=[0,1,2])
 
     # 1은 opt.global_rank를 대체한 값이다
     torch.manual_seed(opt.seed + opt.global_rank) # global rank에 따라서 train 시에 다른 seed를 줌 ( 왜 인지는 모르겠음 )
