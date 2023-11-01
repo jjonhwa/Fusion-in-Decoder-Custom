@@ -33,6 +33,22 @@ Retrieval을 통해 Top n Passage를 추출  ->  각각의 Q-P pair를 Encoder�
 
 ## Run
 
+### setup
+```
+bash requirements.sh
+```
+
+### retrieved dataset
+if you want to make it directly, then use this code
+```
+python3 preprocess/fid_data.py
+```
+
+else, you can use `jjonhwa/SECOND_KQ_V2` dataset. It is linked with `fid` train code.
+
+### fid
+- FiDT5: can apply First_K, LSA, GQA ( 성능 비교한 후, 적용할만한 기법을 탐색 실험 수행 )
+- FiDSKT: can apply First_K, LSA ( LSA의 성능이 좋았기 때문에, Decoder Scaling을 수행한 후에 GQA를 적용하지 않음)
 ```
 # large / per batch 2 /
 # Original

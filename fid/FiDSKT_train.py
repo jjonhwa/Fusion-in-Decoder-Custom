@@ -1,19 +1,17 @@
-# eval_freq, eval_idx
-
+import os
 import time
+import argparse
 import random
 import wandb
-import argparse
-
 import numpy as np
 import pandas as pd
-
 
 from collections import defaultdict
 from tqdm import tqdm
 
 import torch
 import transformers
+
 from torch import nn
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from datasets import load_dataset, Dataset, load_metric
@@ -156,7 +154,10 @@ def train(model, train_dataloader, opt):
                 end_time = time.time()
 
                 if dev_em > best_em:
-                    torch.save(model.state_dict(), f'/home/ubuntu/AGC_second/FiD/save/SUMMARY_FiDSKT_best_s{step}_V2.pt')
+                    if not os.path.exists(opt.save_path):
+                        os.mkdir(opt.save_path)
+                    torch.save(model.state_dict(), os.path.join(opt.save_path, 'best.pt'))
+                    # torch.save(model.state_dict(), f'/home/ubuntu/AGC_second/FiD/save/SUMMARY_FiDSKT_best_s{step}_V2.pt')
                     best_em = dev_em
 
                 wandb.log({'eval_em': dev_em*100})
@@ -260,20 +261,26 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # -- model ( FiD-LIGHT, LSA, GQA )
-    parser.add_argument('--data', type=str, default='jjonhwa/SECOND_KQ_V2', help='choose Retrieved Dataset \
-                                                                                    ( MRC(jjonhwa/SECOND_KQ_V2) or \
-                                                                                    SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
-                                                                                            jjonhwa/SECOND_RETRIEVE_PROCESSED_150)')
-    parser.add_argument('--n_context', type=int, default=10, help='number of context to use for FiD')
+    parser.add_argument('--n_context', type=int, default=5, help='number of context to use for FiD')
     parser.add_argument('--kv_heads', type=int, default=-1, help='number of head about K and V')
     parser.add_argument('--first_k', type=int, default=-1, help='only use first_k tokens from encoder_hidden_states')
     parser.add_argument('--n_cross_layer', type=int, default=-1, help="'only use n_cross_layer'th block's EncDecAttention")
+
+    # -- HyperParameter
     parser.add_argument('--epochs', type=int, default=5)
     parser.add_argument('--batch_size', type=int, default=2)
     parser.add_argument('--text_maxlength', type=int, default=300)
     parser.add_argument("--eval_freq", type=int, default=300) # eval_freq 2000으로 바꾸기
     parser.add_argument("--scheduler", type=str, default='CyclicLR')
     parser.add_argument("--lr", type=float, default=2e-5)
+
+    # -- model ( FiD-LIGHT, LSA, GQA )
+    parser.add_argument('--data', type=str, default='jjonhwa/SECOND_KQ_V2', help='choose Retrieved Dataset \
+                                                                                    ( MRC(jjonhwa/SECOND_KQ_V2) or \
+                                                                                    SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
+                                                                                            jjonhwa/SECOND_RETRIEVE_PROCESSED_150)')
+    parser.add_argument('--save_path', type=str, default='./save/')
+    
     # -- wandb
     parser.add_argument('--wandb_name', type=str, default='FiD')
     sub_args = parser.parse_args()
@@ -283,20 +290,22 @@ if __name__ == '__main__':
     options.add_optim_options() # Optimizer Setting
     opt = options.parse() # argparse
     
+    opt.n_context = sub_args.n_context
+    opt.kv_heads = sub_args.kv_heads
+    opt.first_k = sub_args.first_k
+    opt.n_cross_layer = sub_args.n_cross_layer
+
     opt.lr = sub_args.lr
     opt.scheduler = sub_args.scheduler
     opt.eval_freq = sub_args.eval_freq
     opt.text_maxlength = sub_args.text_maxlength
     opt.per_gpu_batch_size = sub_args.batch_size
     opt.epochs = sub_args.epochs
+    
+    opt.save_path = sub_args.save_path
     opt.from_data = sub_args.data
-    opt.n_context = sub_args.n_context
-    opt.kv_heads = sub_args.kv_heads
-    opt.first_k = sub_args.first_k
-    opt.n_cross_layer = sub_args.n_cross_layer
-
-    # print(opt)
     opt.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    
     torch.manual_seed(opt.seed)
 
     # slurm: Cluster Server 상에서 작업을 관리하기 위한 프로그램, Node간의 통신을 통해 작업 관리를 함.

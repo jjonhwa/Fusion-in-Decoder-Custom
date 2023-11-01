@@ -272,7 +272,7 @@ if __name__ == "__main__":
 
         train_data = pd.DataFrame({"context": context, "summary": summary})
 
-    train_data = train_data.iloc[:100]
+    # train_data = train_data.iloc[:100] # Can experiment using 100 items
     if 'summary' in train_data.columns:
         new_data = get_topn_passage_SUMMARY(
             retrieval,

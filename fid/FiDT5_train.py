@@ -1,3 +1,4 @@
+import os
 import time
 import argparse
 import random
@@ -139,7 +140,10 @@ def train(model, train_dataloader, opt):
                 end_time = time.time()
 
                 if dev_em > best_em:
-                    torch.save(model.state_dict(), f'/home/ubuntu/AGC_second/FiD/save/SUMMARY_FiDT5_best_s{step}_V2.pt')
+                    if not os.path.exists(opt.save_path):
+                        os.mkdir(opt.save_path)
+                    torch.save(model.state_dict(), os.path.join(opt.save_path, 'best.pt'))
+                    # torch.save(model.state_dict(), f'/home/ubuntu/AGC_second/FiD/save/SUMMARY_FiDT5_best_s{step}_V2.pt')
                     best_em = dev_em
 
                 wandb.log({'eval_em': dev_em*100})
@@ -258,6 +262,7 @@ if __name__ == '__main__':
                                                                                     ( MRC(jjonhwa/SECOND_KQ_V2) or \
                                                                                     SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
                                                                                             jjonhwa/SECOND_RETRIEVE_PROCESSED_150)')
+    parser.add_argument('--save_path', type=str, default='./save/')
 
     # -- wandb
     parser.add_argument('--wandb_name', type=str, default='FiD')
@@ -278,6 +283,7 @@ if __name__ == '__main__':
     opt.per_gpu_batch_size = sub_args.batch_size
     opt.eval_freq = sub_args.eval_freq
     
+    opt.save_path = sub_args.save_path
     opt.from_data = sub_args.data
     opt.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
