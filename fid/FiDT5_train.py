@@ -33,7 +33,7 @@ def evaluate(model, dataset, tokenizer, collator, opt):
     dataloader = DataLoader(
         dataset,
         sampler = sampler,
-        batch_size = opt.per_gpu_batch_size * 16,  # evaluation에서만 늘리기 
+        batch_size = opt.per_gpu_batch_size * 8,  # evaluation에서만 늘리기 
         drop_last = False,
         collate_fn = collator
     )
