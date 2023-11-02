@@ -1,4 +1,4 @@
 wandb/
 *.pyc
 __pycache__/
-data/
+# data/
