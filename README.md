@@ -84,4 +84,8 @@ python3 fid/FiDT5_train.py
 # python3 fid/FiDSKT_train.py --n_cross_layer 6
 ```
 
-
+## Experiments
+<img width="784" alt="Screen Shot 2023-11-02 at 5 42 30 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/2e9255fa-bd4b-4768-8f0f-6eabb862d524">
+<img width="784" alt="Screen Shot 2023-11-02 at 5 41 08 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/32188034-658e-49ec-acc2-f4ddb840b794">
+<img width="784" alt="Screen Shot 2023-11-02 at 5 40 40 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/a6dc39e1-a5f9-49fd-984c-67a665224551">
+![Screen Shot 2023-11-02 at 5 40 13 PM](https://github.com/jjonhwa/AGC_rev/assets/53552847/57b630f3-7361-494b-8714-97574ce01319)
