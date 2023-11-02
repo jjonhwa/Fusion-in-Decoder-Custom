@@ -85,7 +85,17 @@ python3 fid/FiDT5_train.py
 ```
 
 ## Experiments
+<img width="784" alt="image" src="https://github.com/jjonhwa/FiD-Custom/assets/53552847/5deec3d7-404b-48fd-951e-48d4e3bf01ca">
 <img width="784" alt="Screen Shot 2023-11-02 at 5 42 30 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/2e9255fa-bd4b-4768-8f0f-6eabb862d524">
 <img width="784" alt="Screen Shot 2023-11-02 at 5 41 08 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/32188034-658e-49ec-acc2-f4ddb840b794">
 <img width="784" alt="Screen Shot 2023-11-02 at 5 40 40 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/a6dc39e1-a5f9-49fd-984c-67a665224551">
-![Screen Shot 2023-11-02 at 5 40 13 PM](https://github.com/jjonhwa/AGC_rev/assets/53552847/57b630f3-7361-494b-8714-97574ce01319)
+
+|                          | EVAL EM | EVAL TIME |
+| ------------------------ | ------- | --------- |
+| FiDT5 Original           | 39.63   | 1,448s    |
+| FiDT5 K8                 | 26.37   | 1,223s    |
+| FiDT5 K32                | 26.33   | 1,260s    |
+| FiDT5 LSA6               | **37.12**   | **1,307s**    |
+| FiDT5 LSA4               | 36.68   | 1,158s    |
+| FiDT5 GQA4               | 23.00   | 1,206s    |
+| FiDSKT LSA6              | 10.82   | 2,576s    |
