@@ -260,6 +260,18 @@ if __name__ == '__main__':
     # 주요 변경해야할 사항: lr, eval_freq, per_gpu_batch_size, n_context, model_name, first_k
     parser = argparse.ArgumentParser()
 
+    # -- encoder, decoder
+    parser.add_argument('--encoder_model_name',
+                        type=str,
+                        default='KETI-AIR/ke-t5-large',
+                        help='just can you t5 family'
+    )
+    parser.add_argument('--decoder_model_name',
+                        type=str,
+                        default='skt/ko-gpt-trinity-1.2B-v0.5',
+                        help='just can you gpt family'
+    )
+    
     # -- model ( FiD-LIGHT, LSA, GQA )
     parser.add_argument('--n_context', type=int, default=5, help='number of context to use for FiD')
     parser.add_argument('--kv_heads', type=int, default=-1, help='number of head about K and V')
@@ -270,15 +282,18 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=5)
     parser.add_argument('--batch_size', type=int, default=2)
     parser.add_argument('--text_maxlength', type=int, default=300)
-    parser.add_argument("--eval_freq", type=int, default=300) # eval_freq 2000으로 바꾸기
+    parser.add_argument("--eval_freq", type=int, default=2000) # eval_freq 2000으로 바꾸기
     parser.add_argument("--scheduler", type=str, default='CyclicLR')
     parser.add_argument("--lr", type=float, default=2e-5)
 
     # -- model ( FiD-LIGHT, LSA, GQA )
-    parser.add_argument('--data', type=str, default='jjonhwa/SECOND_KQ_V2', help='choose Retrieved Dataset \
-                                                                                    ( MRC(jjonhwa/SECOND_KQ_V2) or \
-                                                                                    SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
-                                                                                            jjonhwa/SECOND_RETRIEVE_PROCESSED_150)')
+    parser.add_argument('--data', 
+                        type=str, 
+                        default='jjonhwa/SECOND_KQ_V2', 
+                        help='choose Retrieved Dataset ( MRC(jjonhwa/SECOND_KQ_V2) or \
+                                                         SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
+                                                         jjonhwa/SECOND_RETRIEVE_PROCESSED_150)'
+    )
     parser.add_argument('--save_path', type=str, default='./save/')
     
     # -- wandb
@@ -290,6 +305,9 @@ if __name__ == '__main__':
     options.add_optim_options() # Optimizer Setting
     opt = options.parse() # argparse
     
+    opt.encoder_model_name = sub_args.encoder_model_name
+    opt.decoder_model_name = sub_args.decoder_model_name
+
     opt.n_context = sub_args.n_context
     opt.kv_heads = sub_args.kv_heads
     opt.first_k = sub_args.first_k
@@ -312,31 +330,37 @@ if __name__ == '__main__':
     src.slurm.init_distributed_mode(opt) # GPU Handler
     src.slurm.init_signal_handler()
 
-    encoder_model_name = 'KETI-AIR/ke-t5-large'
-    decoder_model_name = 'skt/ko-gpt-trinity-1.2B-v0.5'
+    # encoder_model_name = 'KETI-AIR/ke-t5-base'
+    # decoder_model_name = 'skt/ko-gpt-trinity-1.2B-v0.5'
     encoder_decoder = EncoderDecoderModel.from_encoder_decoder_pretrained(
-        encoder_model_name, 
-        decoder_model_name
+        opt.encoder_model_name, 
+        opt.decoder_model_name
     )
 
-    tokenizer_input = transformers.T5Tokenizer.from_pretrained(encoder_model_name)
-    tokenizer_output = AutoTokenizer.from_pretrained(decoder_model_name)
+    tokenizer_input = transformers.T5Tokenizer.from_pretrained(opt.encoder_model_name)
+    tokenizer_output = AutoTokenizer.from_pretrained(opt.decoder_model_name)
 
-    config_encoder = AutoConfig.from_pretrained(encoder_model_name)
-    config_decoder = AutoConfig.from_pretrained(decoder_model_name)
+    config_encoder = AutoConfig.from_pretrained(opt.encoder_model_name)
+    config_decoder = AutoConfig.from_pretrained(opt.decoder_model_name)
 
     config = EncoderDecoderConfig.from_encoder_decoder_configs(config_encoder, config_decoder)
 
     # collator에서 Batch별 Max Length로 수행하는 걸로 보임
-    collator = src.data.Collator(opt.text_maxlength,
-                             tokenizer_input,
-                             tokenizer_output,
-                             decoder_maxlength=config.decoder.max_position_embeddings,
-                             answer_maxlength=opt.answer_maxlength)
+    collator = src.data.Collator(
+        opt.text_maxlength,
+        tokenizer_input,
+        tokenizer_output,
+        decoder_maxlength=config.decoder.max_position_embeddings,
+        answer_maxlength=opt.answer_maxlength
+    )
 
     train_dataset, eval_dataset = get_dataset(opt)
 
-    model = src.model.FiDSKT(config, first_k=opt.first_k if opt.first_k != -1 else None) # config를 init으로 받아야 함
+    model = src.model.FiDSKT(
+        config, 
+        opt.encoder_model_name,
+        first_k=opt.first_k if opt.first_k != -1 else None
+    ) # config를 init으로 받아야 함
     encoder_decoder.encoder._modules.pop('decoder')
     print(f"Parameter 사이즈 (Original): {src.model.get_n_params(model)}")
 

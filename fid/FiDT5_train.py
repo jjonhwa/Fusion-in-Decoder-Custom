@@ -33,7 +33,7 @@ def evaluate(model, dataset, tokenizer, collator, opt):
     dataloader = DataLoader(
         dataset,
         sampler = sampler,
-        batch_size = opt.per_gpu_batch_size * 8,  # evaluation에서만 늘리기 
+        batch_size = opt.per_gpu_batch_size * 4,  # evaluation에서만 늘리기 
         drop_last = False,
         collate_fn = collator
     )
@@ -258,10 +258,13 @@ if __name__ == '__main__':
     parser.add_argument("--eval_freq", type=int, default=1000) # eval_freq 1000으로 바꾸기
 
     # -- Dataset (MRC or Summarization)
-    parser.add_argument('--data', type=str, default='jjonhwa/SECOND_KQ_V2', help='choose Retrieved Dataset \
-                                                                                    ( MRC(jjonhwa/SECOND_KQ_V2) or \
-                                                                                    SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
-                                                                                            jjonhwa/SECOND_RETRIEVE_PROCESSED_150)')
+    parser.add_argument('--data', 
+                        type=str, 
+                        default='jjonhwa/SECOND_KQ_V2', 
+                        help='choose Retrieved Dataset ( MRC(jjonhwa/SECOND_KQ_V2) or \
+                                                         SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
+                                                         jjonhwa/SECOND_RETRIEVE_PROCESSED_150)'
+    )
     parser.add_argument('--save_path', type=str, default='./save/')
 
     # -- wandb
@@ -297,9 +300,11 @@ if __name__ == '__main__':
     tokenizer = transformers.T5Tokenizer.from_pretrained(opt.model_name)
 
     # collator에서 Batch별 Max Length로 수행하는 걸로 보임
-    collator = src.data.Collator(opt.text_maxlength,
-                                tokenizer,
-                                answer_maxlength=opt.answer_maxlength)
+    collator = src.data.Collator(
+        opt.text_maxlength,
+        tokenizer,
+        answer_maxlength=opt.answer_maxlength
+    )
 
     # Train: 90% / Eval: 10%
     train_dataset, eval_dataset = get_dataset(opt)

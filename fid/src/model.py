@@ -661,9 +661,10 @@ def cross_attention_forward(
     return output
 
 class FiDSKT(EncoderDecoderModel):
-    def __init__(self, config, first_k=None):
+    def __init__(self, config, encoder_model_name, first_k=None):
         super().__init__(config)
-        self.encoder = transformers.T5EncoderModel.from_pretrained('KETI-AIR/ke-t5-large') # opt.t5_model_name 으로 바꾸기
+        # self.encoder = transformers.T5EncoderModel.from_pretrained('KETI-AIR/ke-t5-large') # opt.t5_model_name 으로 바꾸기
+        self.encoder = transformers.T5EncoderModel.from_pretrained(encoder_model_name)
         
         self.first_k = first_k
         self.wrap_encoder()
