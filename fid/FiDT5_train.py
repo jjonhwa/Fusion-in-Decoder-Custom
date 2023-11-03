@@ -336,6 +336,8 @@ if __name__ == '__main__':
         model = src.model.convert_GQA(model,kv_heads=opt.kv_heads)
         model = src.model.convert_LSA(model,n_cross_layer=opt.n_cross_layer)
     
+    print(f"Parameter 사이즈 (LSA): {src.model.get_n_params(model)}")
+    exit()
     model = nn.DataParallel(model, device_ids=[0,1,2])
 
     # 1은 opt.global_rank를 대체한 값이다

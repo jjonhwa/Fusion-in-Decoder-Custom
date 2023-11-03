@@ -90,12 +90,23 @@ python3 fid/FiDT5_train.py
 <img width="784" alt="Screen Shot 2023-11-02 at 5 41 08 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/32188034-658e-49ec-acc2-f4ddb840b794">
 <img width="784" alt="Screen Shot 2023-11-02 at 5 40 40 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/a6dc39e1-a5f9-49fd-984c-67a665224551">
 
-|                          | EVAL EM | EVAL TIME |
-| ------------------------ | ------- | --------- |
-| FiDT5 Original           | 39.63   | 1,448s    |
-| FiDT5 K8                 | 26.37   | 1,223s    |
-| FiDT5 K32                | 26.33   | 1,260s    |
-| FiDT5 LSA6               | **37.12**   | **1,307s**    |
-| FiDT5 LSA4               | 36.68   | 1,158s    |
-| FiDT5 GQA4               | 23.00   | 1,206s    |
-| FiDSKT LSA6              | 10.82   | 2,576s    |
+|                          | EVAL EM | EVAL TIME | MODEL PARAMETERS |
+| ------------------------ | ------- | --------- | ---------------- |
+| FiDT5 Original           | 39.63   | 1,519s    | 783,019,008      |
+| FiDT5 K8 (FiD-Light)     | 26.37   | 1,215s    | 783,019,008      |
+| FiDT5 K32 (FiD-Light)    | 26.33   | 1,233s    | 783,019,008      |
+| FiDT5 LSA6 (FiDO)        | **37.12**   | **1,268s**    | **699,112,448**      |
+| FiDT5 LSA4 (FiDO)        | 36.68   | 1,265s    | 707,503,104      |
+| FiDT5 GQA4 (FiDO)        | 23.00   | 1,271s    | 783,019,008      |
+| FiDSKT Original (FiDO)   | .       | .         | 1,892,694,144    |
+| FiDSKT LSA6 (FiDO)       | 10.82   | 2,576s    | 1,597,551,744    |
+
+- EVAL EM: 가장 좋은 성능
+- EVAL TIME: 가장 좋은 성능을 낸 순서대로 3개의 Step에서의 evaluation time의 평균
+
+### Analysis
+- First-K, LSA, GQA 모두 evaluation time 측면에서 개선
+- 하지만, 성능의 희생을 많이 감수해야 함.
+- LSA의 경우, evaluation time은 줄이면서도 성능 하락의 폭이 그리 크지 않음.
+- LSA에서 4와 6의 차이가 크지 않은 것으로 보아, Cross Attention 개수의 감소가 일정 수준에서 
+- FiDSKT의 경우, Cross Attention의 파라미터가 학습되지 않아서 성능이 낮은 것으로 보인다. 추가적으로 학습을 진행할 경우 성능 개선의 여지를 기대한다.
