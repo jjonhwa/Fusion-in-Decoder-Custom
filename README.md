@@ -9,6 +9,7 @@
 
 ### FiD-Light
 <img width="1270" alt="image" src="https://github.com/jjonhwa/KLUE-NLI/assets/53552847/8d6a1e91-c309-49c4-a94f-1a1f8daa24a9">
+
 - First-K: FiD에서 각 embedding vecotr를 Seqeunce 단위로 concatenate 수행할 때, 앞에서부터 K개의 Token에 대한 embedding만을 활용하여 concatenate을 수행한다. **(적용 O)**
 - Source Pointing: 정답을 추출한 Evidence Passage의 Index를 함께 반환 -> 이를 활용하여 Passage를 Re-rank 수행하고, Re-ranked Passage를 활용하여 정답 추출 ( 적용 X )
 
