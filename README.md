@@ -86,9 +86,17 @@ python3 fid/FiDT5_train.py
 ```
 
 ## Experiments
+
+### FiDT5 Original
 <img width="784" alt="image" src="https://github.com/jjonhwa/FiD-Custom/assets/53552847/5deec3d7-404b-48fd-951e-48d4e3bf01ca">
+
+### FiDT5 Original, LSA and FiDSKT
 <img width="784" alt="Screen Shot 2023-11-02 at 5 42 30 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/2e9255fa-bd4b-4768-8f0f-6eabb862d524">
+
+### FiDT5 LSA and GQA
 <img width="784" alt="Screen Shot 2023-11-02 at 5 41 08 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/32188034-658e-49ec-acc2-f4ddb840b794">
+
+### FiDT5 First-K
 <img width="784" alt="Screen Shot 2023-11-02 at 5 40 40 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/a6dc39e1-a5f9-49fd-984c-67a665224551">
 
 |                          | EVAL EM | EVAL TIME | MODEL PARAMETERS |
