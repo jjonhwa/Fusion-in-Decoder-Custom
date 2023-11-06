@@ -1,5 +1,5 @@
 # FiD-Custom
-- (Unoffitial) PyTorch implementation of [FiD](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light](https://arxiv.org/abs/2209.14290) and [FiDO](https://arxiv.org/abs/2212.08153) in Korean
+- (Unoffitial) PyTorch implementation of [FiD](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light](https://arxiv.org/abs/2209.14290) and [FiDO](https://arxiv.org/abs/2212.08153)
 - Also, the following pages were referenced for coding. [fid-official](https://github.com/facebookresearch/FiD) and [GQA](https://github.com/fkodom/grouped-query-attention-pytorch)
 
 ## Contents
@@ -77,7 +77,7 @@ python3 fid/FiDT5_train.py
 # with GQA
 # python3 fid/FiDT5_train.py --kv_heads 4
 
-# 위의 것들을 조합해서 활용할 수 있다. 다음과 같이
+# The above can be combined and utilized. as follows
 # python3 fid/FiDT5_train.py --n_cross_layer 6 --kv_heads 4 --first_k 8
 
 # with decoder scaling
