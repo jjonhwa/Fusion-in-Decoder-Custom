@@ -14,8 +14,8 @@
 - Source Pointing: Return the index of the evidence passages from which the correct answer was extracted -> Use it to perform Re-rank on the passages, and use re-ranked passages to extract the correct answer. **(Not Applied)**
 
 ### FiDO
-![image](https://github.com/jjonhwa/FiD-Custom/assets/53552847/cd02c09d-4b8a-4ec9-ad56-7ca7614f7834)
-![image](https://github.com/jjonhwa/FiD-Custom/assets/53552847/1fe5f85b-1711-47e4-a9c3-e99ecd4dbfb6)
+![Screen Shot 2023-11-06 at 11 03 00 AM](https://github.com/jjonhwa/FiD-Custom/assets/53552847/18751e68-a537-45bd-a94a-0272553d3e3b)
+![Screen Shot 2023-11-06 at 11 03 56 AM](https://github.com/jjonhwa/FiD-Custom/assets/53552847/8fc71a84-956a-4dea-aede-7e1b187537a4)
 
 - LSA(Layer-Sparse cross-Attention): Just apply the cross-attention at (n, 2n, 3n, ..)th layer. **(Applied)**
 - MQA(Multi-Query Attention): When applying MHA, Key and Value are applied by sharing one single head. **(Applied as GQA)**
