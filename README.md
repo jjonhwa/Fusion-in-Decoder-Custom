@@ -1,5 +1,5 @@
 # FiD-Custom
-- (Unoffitial) PyTorch implementation of [FiD](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light](https://arxiv.org/abs/2209.14290) and [FiDO](https://arxiv.org/abs/2212.08153)
+- (Unoffitial) PyTorch implementation of [FiD: Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light: Efficient and Effective Retrieval-Augmented Text GenerationDownload PDF](https://arxiv.org/abs/2209.14290) and [FiDO: Fusion-in-Decoder optimized for stronger performance and faster inference](https://arxiv.org/abs/2212.08153)
 - Also, the following pages were referenced for coding. [fid-official](https://github.com/facebookresearch/FiD) and [GQA](https://github.com/fkodom/grouped-query-attention-pytorch)
 
 ## Contents
