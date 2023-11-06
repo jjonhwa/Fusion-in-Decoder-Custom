@@ -14,7 +14,8 @@
 - Source Pointing: 정답을 추출한 Evidence Passage의 Index를 함께 반환 -> 이를 활용하여 Passage를 Re-rank 수행하고, Re-ranked Passage를 활용하여 정답 추출 ( 적용 X )
 
 ### FiDO
-(그림 삽입)
+![image](https://github.com/jjonhwa/clova-airush-2022/assets/53552847/d1e54471-c030-4057-a603-8a92bffa7313)
+
 - LSA(Layer-sparse cross-attention): (n, 2n, 3n, ...)번째 Layer에서의 Cross-Attention 만을 적용 **(적용 O)**
 - MQA(Multi-query attention):  attention 수행 시 Multi Head에서 Key, Value는 single head로 share하여 적용. **(GQA로 적용)**
 - Decoder Scaling: Decoder Model의 Size를 Scale Up. **(적용 O)**
