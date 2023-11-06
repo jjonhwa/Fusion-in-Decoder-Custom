@@ -294,7 +294,7 @@ if __name__ == '__main__':
                                                          SUMMARY(jjonhwa/SECOND_KOWIKI_RETRIEVE_{200 or 300}_V2 or \
                                                          jjonhwa/SECOND_RETRIEVE_PROCESSED_150)'
     )
-    parser.add_argument('--save_path', type=str, default='./save/')
+    parser.add_argument('--save_path', type=str, default='../save/')
     
     # -- wandb
     parser.add_argument('--wandb_name', type=str, default='FiD')

@@ -87,6 +87,20 @@ python3 fid/FiDT5_train.py
 # python3 fid/FiDSKT_train.py --n_cross_layer 6
 ```
 
+### inference
+- If you want to experience `inference.py`, then need to download the fid-trained model. (example model is fine-tuned by summarization dataset)
+- But, that model is not well trained. It is trained with KorQuAD Dataset and slightly overfitted that data.
+
+```
+# download fid-trained model
+gdown https://drive.google.com/uc?id=1bg8tCSImGuNQGNrGdR99RcY_pFHZJUT0
+
+# Go inference
+python3 inference.py
+```
+
+
+
 ## Experiments
 
 ### FiDT5 Original
