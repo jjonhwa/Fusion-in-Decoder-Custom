@@ -127,6 +127,8 @@ python3 inference.py
 | FiDSKT Original (FiDO)   | .       | .         | 1,892,694,144    |
 | FiDSKT LSA6 (FiDO)       | 10.82   | 2,576s    | 1,597,551,744    |
 
+
+- Dataset: KorQuAD 2.0 Dataset
 - EVAL EM: Best Evaluation Score
 - EVAL TIME: Average evaluation times in the 3 steps in order of best performance
 - Backbone Model(FiDT5): `KETI-AIR/ke-t5-large`
