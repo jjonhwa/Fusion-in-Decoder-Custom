@@ -1,6 +1,6 @@
 # FiD-Custom
 - Unoffitial PyTorch implementation of [FiD](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light](https://arxiv.org/abs/2209.14290) and [FiDO](https://arxiv.org/abs/2212.08153) in Korean
-- 또한, 코딩을 위해 다음의 페이지를 참고했다. [fid-official](https://github.com/facebookresearch/FiD) and [GQA](https://github.com/fkodom/grouped-query-attention-pytorch)
+- Also, the following pages were referenced for coding. [fid-official](https://github.com/facebookresearch/FiD) and [GQA](https://github.com/fkodom/grouped-query-attention-pytorch)
 
 ## Contents
 
@@ -10,20 +10,21 @@
 ### FiD-Light
 <img width="1270" alt="image" src="https://github.com/jjonhwa/KLUE-NLI/assets/53552847/8d6a1e91-c309-49c4-a94f-1a1f8daa24a9">
 
-- First-K: FiD에서 각 embedding vecotr를 Seqeunce 단위로 concatenate 수행할 때, 앞에서부터 K개의 Token에 대한 embedding만을 활용하여 concatenate을 수행한다. **(적용 O)**
-- Source Pointing: 정답을 추출한 Evidence Passage의 Index를 함께 반환 -> 이를 활용하여 Passage를 Re-rank 수행하고, Re-ranked Passage를 활용하여 정답 추출 ( 적용 X )
+- First-K: When concatenate each embedding vector to single sequence in FiD, concatenation is performed using only the incorporation of K tokens from the beginning. **(Applied)**
+- Source Pointing: Return the index of the evidence passages from which the correct answer was extracted -> Use it to perform Re-rank on the passages, and use re-ranked passages to extract the correct answer. **(Not Applied)**
 
 ### FiDO
 ![image](https://github.com/jjonhwa/FiD-Custom/assets/53552847/cd02c09d-4b8a-4ec9-ad56-7ca7614f7834)
 ![image](https://github.com/jjonhwa/FiD-Custom/assets/53552847/1fe5f85b-1711-47e4-a9c3-e99ecd4dbfb6)
 
-- LSA(Layer-sparse cross-attention): (n, 2n, 3n, ...)번째 Layer에서의 Cross-Attention 만을 적용 **(적용 O)**
-- MQA(Multi-query attention):  attention 수행 시 Multi Head에서 Key, Value는 single head로 share하여 적용. **(GQA로 적용)**
-- Decoder Scaling: Decoder Model의 Size를 Scale Up. **(적용 O)**
+- LSA(Layer-Sparse cross-Attention): Just apply the cross-attention at (n, 2n, 3n, ..)th layer. **(Applied)**
+- MQA(Multi-Query Attention): When applying MHA, Key and Value are applied by sharing one single head. **(Applied as GQA)**
+- Decoder Scaling: Scale up the decoder model's size. **(Applied)**
+- **NOTE:** It was implemented only by increasing the size with a decoder model based on GPT-2. If you want to connect other Large models, please refer to the `fid/FiDSKT_train.py`. In addition, in the case of decoder scaling, only First-K and LSA are applicable.
 
 ### Retrieval
-- if you want to train your own retrieval model. then, check [this repository](https://github.com/jjonhwa/Cross-Encoder-with-Bi-Encoder)
-- 위 레포지토리에 기반하여 code를 작성하였다.
+- If you want to train your own retrieval model. then, check [this repository](https://github.com/jjonhwa/Cross-Encoder-with-Bi-Encoder)
+- The code related to the retrieval was created based on the above repository
 
 ## Data
 ```
@@ -54,9 +55,8 @@ bash requirements.sh
 ```
 
 ### preprocess
-- make retrieved dataset (If you have a lot of data, then, 굉장히 오랜시간이 걸린다.)
-- you can use already made `jjonhwa/SECOND_KQ_V2` dataset. It is linked with `fid` train code.
-(이미 만들어진 데이터를 활용할 수 있다.)
+- Make retrieved dataset (If you have a lot of data, then, It takes a very long time. If someone can optimize that code, please pull-request to me)
+- Can use already made `jjonhwa/SECOND_KQ_V2` dataset. It is linked with `fid` train code.
 
 ```
 python3 preprocess/fid_data.py
@@ -113,8 +113,8 @@ python3 fid/FiDT5_train.py
 | FiDSKT Original (FiDO)   | .       | .         | 1,892,694,144    |
 | FiDSKT LSA6 (FiDO)       | 10.82   | 2,576s    | 1,597,551,744    |
 
-- EVAL EM: 가장 좋은 성능
-- EVAL TIME: 가장 좋은 성능을 낸 순서대로 3개의 Step에서의 evaluation time의 평균
+- EVAL EM: Best Evaluation Score
+- EVAL TIME: Average evaluation times in the 3 steps in order of best performance
 - Backbone Model(FiDT5): `KETI-AIR/ke-t5-large`
 - Backbone Model(FiDSKT): `Encoder -> KETI-AIR/ke-t5-large(encoder)`, `Decoder -> skt/ko-gpt-trinity-1.2B-v0.5`
 - n_context: `FiDT5 - 10`, `FiDSKT - 5`
@@ -125,7 +125,8 @@ python3 fid/FiDT5_train.py
 
 
 ### Analysis
-- First-K, LSA, GQA 모두 evaluation time 측면에서 개선. 하지만, 성능의 희생을 많이 감수해야 함.
-- LSA의 경우, evaluation time은 줄이면서도 성능 하락의 폭이 그리 크지 않음.
-- LSA에서 4와 6의 차이가 크지 않은 것으로 보아, Cross Attention 개수의 약간의 차이는 큰 성능 차이를 보이지 않음. 
-- FiDSKT의 경우, Cross Attention의 파라미터가 학습되지 않아서 성능이 낮은 것으로 보임. 추가적으로 학습을 진행할 경우 성능 개선의 여지가 보임.
+- All methods improve evaluation time, but degrade performance
+- But, **LSA don't downgrade performance much** and **also get great improve evaluation time**
+- The difference between LSA4 and LSA6 is not significant. based on this point, difference in the number of cross-attention does not show a significant difference in performance when reduced more than a certain number.
+- In the case of FiDSKT, the performance seems to be low because the parameters of Cross-Attention are not learned. If additional learning is conducted, there is room for performance improvement.
+
