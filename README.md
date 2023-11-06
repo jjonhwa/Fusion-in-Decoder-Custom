@@ -104,7 +104,7 @@ python3 inference.py
 ## Experiments
 
 ### FiDT5 Original
-<img width="784" alt="image" src="https://github.com/jjonhwa/FiD-Custom/assets/53552847/5deec3d7-404b-48fd-951e-48d4e3bf01ca">
+<img width="784" alt="Screen Shot 2023-11-06 at 2 16 33 PM" src="https://github.com/jjonhwa/FiD-Custom/assets/53552847/49724e17-a0a9-4877-a658-0ae028f5642c">
 
 ### FiDT5 Original, LSA and FiDSKT
 <img width="784" alt="Screen Shot 2023-11-02 at 5 42 30 PM" src="https://github.com/jjonhwa/AGC_rev/assets/53552847/2e9255fa-bd4b-4768-8f0f-6eabb862d524">
