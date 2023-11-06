@@ -1,5 +1,5 @@
 # FiD-Custom
-- Unoffitial PyTorch implementation of [FiD](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light](https://arxiv.org/abs/2209.14290) and [FiDO](https://arxiv.org/abs/2212.08153) in Korean
+- (Unoffitial) PyTorch implementation of [FiD](https://arxiv.org/pdf/2007.01282.pdf), [FiD-Light](https://arxiv.org/abs/2209.14290) and [FiDO](https://arxiv.org/abs/2212.08153) in Korean
 - Also, the following pages were referenced for coding. [fid-official](https://github.com/facebookresearch/FiD) and [GQA](https://github.com/fkodom/grouped-query-attention-pytorch)
 
 ## Contents
